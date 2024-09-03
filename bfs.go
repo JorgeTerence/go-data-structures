@@ -17,16 +17,16 @@ var (
 	White   = "\033[97m"
 )
 
-func isValid(m [][]int, p Point) bool {
-	return p.x >= 0 && p.x < len(m[0]) && p.y >= 0 && p.y < len(m) && m[p.y][p.x] == 1
+func isValid(m [][]int, p Point, start int) bool {
+	return p.x >= 0 && p.x < len(m[0]) && p.y >= 0 && p.y < len(m) && m[p.y][p.x] == start
 }
 
-func neighbours(m [][]int, v Point) []Point {
+func neighbours(m [][]int, v Point, start int) []Point {
 	indexes := []Point{{v.x, v.y - 1}, {v.x, v.y + 1}, {v.x - 1, v.y}, {v.x + 1, v.y}}
 	res := make([]Point, 0)
 
 	for _, coord := range indexes {
-		if isValid(m, coord) {	
+		if isValid(m, coord, start) {	
 			res = append(res, coord)
 		}
 	}
@@ -79,7 +79,7 @@ func main() {
 
 		if !Contains(visited, v) {
 			visited = append(visited, v)
-			for _, w := range neighbours(m, v) {
+			for _, w := range neighbours(m, v, m[y][x]) {
 				if !Contains(visited, w) {
 					queue = append(queue, w)
 				}
