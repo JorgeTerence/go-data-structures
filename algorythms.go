@@ -1,10 +1,19 @@
 package main
 
 import (
-	"bfs"
 	"fmt"
-	g "geometry"
 	"os"
+	"os/exec"
+
+	"bfs"
+	g "geometry"
+)
+
+const (
+	upArrow    = 'w'
+	downArrow  = 's'
+	leftArrow  = 'a'
+	rightArrow = 'd'
 )
 
 func main() {
@@ -16,22 +25,40 @@ func main() {
 		{1, 0, 1, 0, 0, 1, 1},
 	}
 
-	bfs.PrintMatrix(m, []g.Point{})
-	x, y := -1, -1
+	start := g.P(0, 0)
 
-	fmt.Println("Digite as coordenadas. Ex: 0 2")
-	n, err := fmt.Scanf("%d %d", &x, &y)
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 
-	if n < 2 || err != nil {
-		fmt.Println(x)
-		fmt.Println(y)
-		os.Exit(1)
+	for i := 1; ; i++ {
+		bfs.PrintMatrix(m, []g.Point{start})
+		dir := ""
+		fmt.Scanf("%s", &dir)
+
+		if len(dir) == 0 {
+			break
+		}
+
+		if dir[0] == upArrow {
+			start.Y -= 1
+		} else if dir[0] == downArrow {
+			start.Y += 1
+		} else if dir[0] == leftArrow {
+			start.X -= 1
+		} else if dir[0] == rightArrow {
+			start.X += 1
+		} else {
+			break
+		}
+
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
 	}
 
 	visited := make([]g.Point, 0)
-	queue := []g.Point{g.P(x, y)}
-
-	bfs.PrintMatrix(m, queue)
+	queue := []g.Point{start}
 
 	for len(queue) > 0 {
 		v := queue[0]
@@ -39,7 +66,7 @@ func main() {
 
 		if !g.Contains(visited, v) {
 			visited = append(visited, v)
-			for _, w := range bfs.Neighbours(m, v, m[y][x]) {
+			for _, w := range bfs.Neighbours(m, v, m[start.Y][start.X]) {
 				if !g.Contains(visited, w) {
 					queue = append(queue, w)
 				}
@@ -48,6 +75,5 @@ func main() {
 
 	}
 
-	fmt.Println("---------")
 	bfs.PrintMatrix(m, visited)
 }

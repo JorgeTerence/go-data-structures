@@ -32,6 +32,6 @@ func PrintMatrix(m [][]int, visited []g.Point) {
 				fmt.Print("", v)
 			}
 		}
-		fmt.Println("")
+		fmt.Print("\n")
 	}
 }
