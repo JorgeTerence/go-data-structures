@@ -1,8 +1,12 @@
-package main
+package geometry
 
 type Point struct {
-	x int
-	y int
+	X int
+	Y int
+}
+
+func P(x, y int) Point {
+    return Point{X: x, Y: y}
 }
 
 func Contains(arr []Point, v Point) bool {
